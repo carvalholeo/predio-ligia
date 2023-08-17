@@ -5,7 +5,12 @@ const listaApartamentos = [
   {
     id: 2,
     apartamento: "11",
-    pago: [false],
+    pago: [
+      {
+        status: false,
+        mes: 1
+      }
+    ],
   },
 
   {
@@ -282,15 +287,51 @@ listaApartamentos.sort(function (itemA, itemB) {
 })
 
 for (let i = 0; i < todosApartamentos.length; i++) {
-  const infoApartamento = listaApartamentos[i];
   const apartamento = todosApartamentos[i];
+  decideQuemEstaDevendo(listaApartamentos[i], apartamento);
 
+  apartamento.addEventListener('contextmenu', pagando);
+  apartamento.addEventListener('click', devendo);
+}
+
+function devendo(evento) {
+  const target = evento.target;
+  const id = +target.id;
+
+  const index = listaApartamentos.findIndex(apartamento => apartamento.id === id);
+
+  listaApartamentos[index].pago.push(false);
+
+  for (let i = 0; i < todosApartamentos.length; i++) {
+    decideQuemEstaDevendo(listaApartamentos[i], todosApartamentos[i]);
+  }
+}
+
+function pagando(evento) {
+  evento.preventDefault();
+  const target = evento.target;
+  const id = +target.id;
+
+  const index = listaApartamentos.findIndex(apartamento => apartamento.id === id);
+
+  const indexPagamento = listaApartamentos[index].pago.findIndex(value => !value);
+
+  if (indexPagamento >= 0) {
+    listaApartamentos[index].pago[indexPagamento] = true;
+  }
+
+  for (let i = 0; i < todosApartamentos.length; i++) {
+    decideQuemEstaDevendo(listaApartamentos[i], todosApartamentos[i]);
+  }
+}
+
+function decideQuemEstaDevendo(infoApartamento, apartamento) {
+  apartamento.style.backgroundColor = 'inherit';
   apartamento.innerText = infoApartamento.apartamento;
   apartamento.id = infoApartamento.id;
   const naoEstaPago = infoApartamento.pago.includes(false);
 
   if (naoEstaPago) {
     apartamento.style.backgroundColor = "green";
-    // apartamento.style.color = 'white'
   }
 }
