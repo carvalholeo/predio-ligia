@@ -1,4 +1,5 @@
 const rua = document.querySelector("body");
+const mes = document.querySelector('#mes-referencia');
 rua.style.backgroundColor = "blue";
 
 const listaApartamentos = [
@@ -8,7 +9,11 @@ const listaApartamentos = [
     pago: [
       {
         status: false,
-        mes: 1
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 3]
       }
     ],
   },
@@ -16,259 +21,726 @@ const listaApartamentos = [
   {
     id: 3,
     apartamento: "12",
-    pago: [false],
+    pago: [
+      {
+        status: false,
+        mes: [12, 8, 5]
+      },
+      {
+        status: true,
+        mes: [4, 1, 2]
+      }
+    ],
   },
   {
     id: 4,
     apartamento: "14",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 5,
     apartamento: "21",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 6,
     apartamento: "22",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 8,
     apartamento: "23",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 9,
     apartamento: "24",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 10,
     apartamento: "31",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 11,
     apartamento: "32",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 12,
     apartamento: "33",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 13,
     apartamento: "34",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 14,
     apartamento: "41",
-    pago: [false],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 15,
     apartamento: "42",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 16,
     apartamento: "43",
-    pago: [false],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 17,
     apartamento: "44",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 18,
     apartamento: "51",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 19,
     apartamento: "52",
-    pago: [false],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 20,
     apartamento: "53",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 21,
     apartamento: "54",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 22,
     apartamento: "61",
-    pago: [false],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 23,
     apartamento: "62",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 24,
     apartamento: "63",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 25,
     apartamento: "64",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 26,
     apartamento: "71",
-    pago: [false],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 27,
     apartamento: "72",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 28,
     apartamento: "73",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 29,
     apartamento: "74",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 30,
     apartamento: "81",
-    pago: [false],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 31,
     apartamento: "82",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 32,
     apartamento: "83",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 33,
     apartamento: "84",
-    pago: [false],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 34,
     apartamento: "91",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 35,
     apartamento: "92",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 36,
     apartamento: "93",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 37,
     apartamento: "94",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 38,
     apartamento: "101",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 39,
     apartamento: "102",
-    pago: [false],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 40,
     apartamento: "103",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 41,
     apartamento: "104",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 42,
     apartamento: "201",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 43,
     apartamento: "203",
-    pago: [false],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 44,
     apartamento: "204",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 45,
     apartamento: "301",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 46,
     apartamento: "302",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 48,
     apartamento: "303",
-    pago: [false],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 49,
     apartamento: "304",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 50,
     apartamento: "401",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 51,
     apartamento: "402",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 52,
     apartamento: "403",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 53,
     apartamento: "404",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 54,
     apartamento: "13",
-    pago: [true],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
   {
     id: 55,
     apartamento: "202",
-    pago: [false],
+    pago: [
+      {
+        status: false,
+        mes: [1, 2, 3]
+      },
+      {
+        status: true,
+        mes: [5, 6, 7]
+      }
+    ],
   },
 ];
+
+mes.addEventListener('change', function(evento) {
+  const mesReferencia = +evento.target.value;
+
+  for (let i = 0; i < todosApartamentos.length; i++) {
+    decideQuemEstaDevendo(listaApartamentos[i], todosApartamentos[i], mesReferencia);
+  }
+});
 
 const todosApartamentos = Array.from(
   document.querySelectorAll(".apartamento")
@@ -297,13 +769,29 @@ for (let i = 0; i < todosApartamentos.length; i++) {
 function devendo(evento) {
   const target = evento.target;
   const id = +target.id;
+  const mes = +document.querySelector('#mes-referencia').value;
+
+  if (isNaN(mes)) {
+    return;
+  }
 
   const index = listaApartamentos.findIndex(apartamento => apartamento.id === id);
+  const naoPagamentoIndex = listaApartamentos[index].pago.findIndex(value => !value.status);
+  const naoPagouEsseMes = listaApartamentos[index].pago[naoPagamentoIndex].mes.includes(mes);
 
-  listaApartamentos[index].pago.push(false);
+  const pagamentoIndex = listaApartamentos[index].pago.findIndex(value => value.status);
+  const pagouEsseMes = listaApartamentos[index].pago[pagamentoIndex].mes.findIndex(mes => mes);
+
+  if(pagouEsseMes >= 0) {
+    listaApartamentos[index].pago[pagamentoIndex].mes = listaApartamentos[index].pago[pagamentoIndex].mes.filter(mesInterno => mesInterno !== mes);
+  }
+
+  if (!naoPagouEsseMes) {
+    listaApartamentos[index].pago[naoPagamentoIndex].mes.push(mes);
+  }
 
   for (let i = 0; i < todosApartamentos.length; i++) {
-    decideQuemEstaDevendo(listaApartamentos[i], todosApartamentos[i]);
+    decideQuemEstaDevendo(listaApartamentos[i], todosApartamentos[i], mes);
   }
 }
 
@@ -311,27 +799,49 @@ function pagando(evento) {
   evento.preventDefault();
   const target = evento.target;
   const id = +target.id;
+  const mes = +document.querySelector('#mes-referencia').value;
+
+  if (isNaN(mes)) {
+    return;
+  }
 
   const index = listaApartamentos.findIndex(apartamento => apartamento.id === id);
+  const pagamentoIndex = listaApartamentos[index].pago.findIndex(value => value.status);
+  const pagouEsseMes = listaApartamentos[index].pago[pagamentoIndex].mes.includes(mes);
 
-  const indexPagamento = listaApartamentos[index].pago.findIndex(value => !value);
+  const naoPagamentoIndex = listaApartamentos[index].pago.findIndex(value => !value.status);
+  const naoPagouEsseMes = listaApartamentos[index].pago[naoPagamentoIndex].mes.findIndex(mes => mes);
 
-  if (indexPagamento >= 0) {
-    listaApartamentos[index].pago[indexPagamento] = true;
+  if (naoPagouEsseMes >= 0) {
+    listaApartamentos[index].pago[naoPagamentoIndex].mes = listaApartamentos[index].pago[naoPagamentoIndex].mes.filter(mesInterno => mesInterno !== mes);
+  }
+
+  if (!pagouEsseMes) {
+    listaApartamentos[index].pago[pagamentoIndex].mes.push(mes);
   }
 
   for (let i = 0; i < todosApartamentos.length; i++) {
-    decideQuemEstaDevendo(listaApartamentos[i], todosApartamentos[i]);
+    decideQuemEstaDevendo(listaApartamentos[i], todosApartamentos[i], mes);
   }
 }
 
-function decideQuemEstaDevendo(infoApartamento, apartamento) {
+function decideQuemEstaDevendo(infoApartamento, apartamento, mesReferencia = 0) {
   apartamento.style.backgroundColor = 'inherit';
   apartamento.innerText = infoApartamento.apartamento;
   apartamento.id = infoApartamento.id;
-  const naoEstaPago = infoApartamento.pago.includes(false);
 
-  if (naoEstaPago) {
-    apartamento.style.backgroundColor = "green";
+  if (mesReferencia > 0) {
+    const naoEstaPagoNoMes = infoApartamento.pago.findIndex(value => !value.status && value.mes.includes(mesReferencia));
+
+    if (naoEstaPagoNoMes >= 0) {
+      apartamento.style.backgroundColor = "green";
+    }
+  } else {
+    const naoEstaPago = infoApartamento.pago.find(value => !value.status);
+    const temMesDevendo = naoEstaPago.mes.length;
+
+    if (naoEstaPago && temMesDevendo > 0) {
+      apartamento.style.backgroundColor = "green";
+    }
   }
 }
