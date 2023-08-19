@@ -17,10 +17,6 @@ body {
   display: flex;
 }
 
-.andar:nth-child(even) {
-  background-color: brown;
-}
-
 .apartamento {
   height: 100%;
   width: 20%;
