@@ -1,5 +1,7 @@
 const rua = document.querySelector("body");
 const mes = document.querySelector('#mes-referencia');
+const pesquisa = document.querySelector('#pesquisa');
+const form = document.querySelector('form');
 rua.style.backgroundColor = "blue";
 
 const listaApartamentos = [
@@ -734,6 +736,68 @@ const listaApartamentos = [
   },
 ];
 
+const nomes = [
+  "guilherme",
+  "Cesar",
+  "Luiz",
+  "gustavo",
+  "Andreia",
+  "João",
+  "sérgio",
+  "rodolfo",
+  "Flavio",
+  "Vicente",
+  "Alice",
+  "Raimundo",
+  "Patricia",
+  "Daniel",
+  "Rosa",
+  "Flavia",
+  "davi",
+  "Fernanda",
+  "Ana",
+  "carolina",
+  "Bruna",
+  "felipe",
+  "Max",
+  "Mauro",
+  "Eliza",
+  "Enzo",
+  "Gabriel",
+  "Paulo",
+  "Ariel",
+  "Mauro",
+  "Gabriela",
+  "André",
+  "Georgia",
+  "Caetano",
+  "Lucas",
+  "Daniela",
+  "Tiago",
+  "Vitor",
+  "Otávio",
+  "Maria",
+  "Mariana",
+  "Nelson",
+  "Tarcisio",
+  "Helena",
+  "Juliano",
+  "Juliana",
+  "Roberto",
+  "Carla",
+  "Inês",
+  "Leda",
+  "Fatima",
+  "Lourdes"
+];
+
+form.addEventListener('submit', evento => evento.preventDefault());
+
+nomes.forEach((nome, indice) => {
+  const apartamento = listaApartamentos[indice];
+  apartamento.nome = nome;
+})
+
 mes.addEventListener('change', function(evento) {
   const mesReferencia = +evento.target.value;
 
@@ -741,6 +805,9 @@ mes.addEventListener('change', function(evento) {
     decideQuemEstaDevendo(listaApartamentos[i], todosApartamentos[i], mesReferencia);
   }
 });
+
+pesquisa.addEventListener('change', pesquisaApartamento);
+pesquisa.addEventListener('input', pesquisaApartamento);
 
 const todosApartamentos = Array.from(
   document.querySelectorAll(".apartamento")
@@ -827,7 +894,7 @@ function pagando(evento) {
 
 function decideQuemEstaDevendo(infoApartamento, apartamento, mesReferencia = 0) {
   apartamento.style.backgroundColor = 'inherit';
-  apartamento.innerText = infoApartamento.apartamento;
+  apartamento.innerText = `${infoApartamento.apartamento} - ${infoApartamento.nome}`;
   apartamento.id = infoApartamento.id;
 
   if (mesReferencia > 0) {
@@ -844,4 +911,43 @@ function decideQuemEstaDevendo(infoApartamento, apartamento, mesReferencia = 0) 
       apartamento.style.backgroundColor = "green";
     }
   }
+}
+
+function pesquisaApartamento(evento) {
+  const target = evento.target;
+  let value = target.value;
+  const resultado = document.querySelector('.resultado');
+
+  resultado.innerHTML = '';
+
+  value = value.trim();
+
+  if (value.length < 2) {
+    return;
+  }
+
+  const apartamentos = listaApartamentos.filter(apartamento => {
+    if (apartamento.apartamento === value) {
+      return apartamento;
+    }
+
+    // Documentando por https://medium.com/thread-engineering/searching-and-sorting-text-with-diacritical-marks-in-javascript-45afef20e7f2#
+    const nome = apartamento.nome.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '');
+    const valueClean = value.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '');
+
+    if (nome.search(valueClean) >= 0) {
+      return apartamento;
+    }
+  });
+
+  if (!apartamentos) {
+    return;
+  }
+
+  apartamentos.forEach(apartamento => {
+    const p = document.createElement('p');
+    p.innerText = `${apartamento.apartamento} - ${apartamento.nome}`;
+    resultado.appendChild(p);
+  });
+
 }
