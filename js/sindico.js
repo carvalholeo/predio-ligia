@@ -4,7 +4,7 @@ const pesquisa = document.querySelector('#pesquisa');
 const form = document.querySelector('form');
 rua.style.backgroundColor = "blue";
 
-const listaApartamentos = [
+const listaInformacaoDosApartamentos = [
   {
     id: 2,
     apartamento: "11",
@@ -794,26 +794,23 @@ const nomes = [
 form.addEventListener('submit', evento => evento.preventDefault());
 
 nomes.forEach((nome, indice) => {
-  const apartamento = listaApartamentos[indice];
+  const apartamento = listaInformacaoDosApartamentos[indice];
   apartamento.nome = nome;
 })
 
-mes.addEventListener('change', function(evento) {
-  const mesReferencia = +evento.target.value;
-
-  for (let i = 0; i < todosApartamentos.length; i++) {
-    decideQuemEstaDevendo(listaApartamentos[i], todosApartamentos[i], mesReferencia);
-  }
-});
-
-pesquisa.addEventListener('change', pesquisaApartamento);
-pesquisa.addEventListener('input', pesquisaApartamento);
-
-const todosApartamentos = Array.from(
+const listaDeApartamentosNaTela = Array.from(
   document.querySelectorAll(".apartamento")
 ).reverse();
 
-listaApartamentos.sort(function (itemA, itemB) {
+mes.addEventListener('change', function(evento) {
+  const mesReferencia = +evento.target.value;
+  decideQuemEstaDevendo(listaInformacaoDosApartamentos, listaDeApartamentosNaTela, mesReferencia);
+});
+
+pesquisa.addEventListener('change', gerenciarPesquisa);
+pesquisa.addEventListener('input', gerenciarPesquisa);
+
+listaInformacaoDosApartamentos.sort(function (itemA, itemB) {
   if (Number(itemA.apartamento) < Number(itemB.apartamento)) {
     return -1;
   }
@@ -823,131 +820,150 @@ listaApartamentos.sort(function (itemA, itemB) {
   }
 
   return 0;
-})
+});
 
-for (let i = 0; i < todosApartamentos.length; i++) {
-  const apartamento = todosApartamentos[i];
-  decideQuemEstaDevendo(listaApartamentos[i], apartamento);
+listaDeApartamentosNaTela.forEach(elemento => {
+  elemento.addEventListener('contextmenu', gerenciarPagamento);
+  elemento.addEventListener('click', gerenciarDevedor);
+});
 
-  apartamento.addEventListener('contextmenu', pagando);
-  apartamento.addEventListener('click', devendo);
-}
+decideQuemEstaDevendo(listaInformacaoDosApartamentos, listaDeApartamentosNaTela);
 
-function devendo(evento) {
+function gerenciarDevedor(evento) {
   const target = evento.target;
   const id = +target.id;
-  const mes = +document.querySelector('#mes-referencia').value;
+  const mes = mesDeReferencia();
 
-  if (isNaN(mes)) {
-    return;
-  }
-
-  const index = listaApartamentos.findIndex(apartamento => apartamento.id === id);
-  const naoPagamentoIndex = listaApartamentos[index].pago.findIndex(value => !value.status);
-  const naoPagouEsseMes = listaApartamentos[index].pago[naoPagamentoIndex].mes.includes(mes);
-
-  const pagamentoIndex = listaApartamentos[index].pago.findIndex(value => value.status);
-  const pagouEsseMes = listaApartamentos[index].pago[pagamentoIndex].mes.findIndex(mes => mes);
-
-  if(pagouEsseMes >= 0) {
-    listaApartamentos[index].pago[pagamentoIndex].mes = listaApartamentos[index].pago[pagamentoIndex].mes.filter(mesInterno => mesInterno !== mes);
-  }
-
-  if (!naoPagouEsseMes) {
-    listaApartamentos[index].pago[naoPagamentoIndex].mes.push(mes);
-  }
-
-  for (let i = 0; i < todosApartamentos.length; i++) {
-    decideQuemEstaDevendo(listaApartamentos[i], todosApartamentos[i], mes);
-  }
+  incluirDevedor(id, mes);
+  decideQuemEstaDevendo(listaInformacaoDosApartamentos, listaDeApartamentosNaTela, mes);
 }
 
-function pagando(evento) {
+function gerenciarPagamento(evento) {
   evento.preventDefault();
   const target = evento.target;
   const id = +target.id;
+  const mes = mesDeReferencia();
+
+  recebePagamento(id, mes);
+  decideQuemEstaDevendo(listaInformacaoDosApartamentos, listaDeApartamentosNaTela, mes);
+}
+
+function mesDeReferencia() {
   const mes = +document.querySelector('#mes-referencia').value;
+  return isNaN(mes) ? 0 : mes;
+}
 
-  if (isNaN(mes)) {
-    return;
-  }
+function recebePagamento(idDoApartamento, mesAtual) {
+  const index = listaInformacaoDosApartamentos.findIndex(apartamento => apartamento.id === idDoApartamento);
+  const pagamentoIndex = listaInformacaoDosApartamentos[index].pago.findIndex(value => value.status);
+  const pagouEsseMes = listaInformacaoDosApartamentos[index].pago[pagamentoIndex].mes.includes(mesAtual);
 
-  const index = listaApartamentos.findIndex(apartamento => apartamento.id === id);
-  const pagamentoIndex = listaApartamentos[index].pago.findIndex(value => value.status);
-  const pagouEsseMes = listaApartamentos[index].pago[pagamentoIndex].mes.includes(mes);
-
-  const naoPagamentoIndex = listaApartamentos[index].pago.findIndex(value => !value.status);
-  const naoPagouEsseMes = listaApartamentos[index].pago[naoPagamentoIndex].mes.findIndex(mes => mes);
+  const naoPagamentoIndex = listaInformacaoDosApartamentos[index].pago.findIndex(value => !value.status);
+  const naoPagouEsseMes = listaInformacaoDosApartamentos[index].pago[naoPagamentoIndex].mes.findIndex(mes => mes);
 
   if (naoPagouEsseMes >= 0) {
-    listaApartamentos[index].pago[naoPagamentoIndex].mes = listaApartamentos[index].pago[naoPagamentoIndex].mes.filter(mesInterno => mesInterno !== mes);
+    listaInformacaoDosApartamentos[index].pago[naoPagamentoIndex].mes = listaInformacaoDosApartamentos[index].pago[naoPagamentoIndex].mes.filter(mesInterno => mesInterno !== mesAtual);
   }
 
   if (!pagouEsseMes) {
-    listaApartamentos[index].pago[pagamentoIndex].mes.push(mes);
-  }
-
-  for (let i = 0; i < todosApartamentos.length; i++) {
-    decideQuemEstaDevendo(listaApartamentos[i], todosApartamentos[i], mes);
+    listaInformacaoDosApartamentos[index].pago[pagamentoIndex].mes.push(mesAtual);
   }
 }
 
-function decideQuemEstaDevendo(infoApartamento, apartamento, mesReferencia = 0) {
-  apartamento.style.backgroundColor = 'inherit';
-  apartamento.innerText = `${infoApartamento.apartamento} - ${infoApartamento.nome}`;
-  apartamento.id = infoApartamento.id;
+function incluirDevedor(idDoApartamento, mesAtual) {
+  const index = listaInformacaoDosApartamentos.findIndex(apartamento => apartamento.id === idDoApartamento);
+  const naoPagamentoIndex = listaInformacaoDosApartamentos[index].pago.findIndex(value => !value.status);
+  const naoPagouEsseMes = listaInformacaoDosApartamentos[index].pago[naoPagamentoIndex].mes.includes(mesAtual);
 
-  if (mesReferencia > 0) {
-    const naoEstaPagoNoMes = infoApartamento.pago.findIndex(value => !value.status && value.mes.includes(mesReferencia));
+  const pagamentoIndex = listaInformacaoDosApartamentos[index].pago.findIndex(value => value.status);
+  const pagouEsseMes = listaInformacaoDosApartamentos[index].pago[pagamentoIndex].mes.findIndex(mes => mes);
 
-    if (naoEstaPagoNoMes >= 0) {
-      apartamento.style.backgroundColor = "green";
-    }
-  } else {
-    const naoEstaPago = infoApartamento.pago.find(value => !value.status);
-    const temMesDevendo = naoEstaPago.mes.length;
+  if(pagouEsseMes >= 0) {
+    listaInformacaoDosApartamentos[index].pago[pagamentoIndex].mes = listaInformacaoDosApartamentos[index].pago[pagamentoIndex].mes.filter(mesInterno => mesInterno !== mesAtual);
+  }
 
-    if (naoEstaPago && temMesDevendo > 0) {
-      apartamento.style.backgroundColor = "green";
+  if (!naoPagouEsseMes) {
+    listaInformacaoDosApartamentos[index].pago[naoPagamentoIndex].mes.push(mesAtual);
+  }
+}
+
+function decideQuemEstaDevendo(listaApartamentos, apartamentosNaTela, mesReferencia = 0) {
+  for (let i = 0; i < listaApartamentos.length; i++) {
+    const infoApartamento = listaApartamentos[i];
+    const apartamento = apartamentosNaTela[i];
+
+    alteraEstiloVisual(apartamento, 'backgroundColor', 'inherit');
+
+    apartamento.innerText = `${infoApartamento.apartamento} - ${infoApartamento.nome}`;
+    apartamento.id = infoApartamento.id;
+
+    if (mesReferencia > 0) {
+      const naoEstaPagoNoMes = infoApartamento.pago.findIndex(value => !value.status && value.mes.includes(mesReferencia));
+
+      if (naoEstaPagoNoMes >= 0) {
+        alteraEstiloVisual(apartamento, 'backgroundColor', 'green');
+      }
+    } else {
+      const naoEstaPago = infoApartamento.pago.find(value => !value.status);
+      const temMesDevendo = naoEstaPago.mes.length;
+
+      if (naoEstaPago && temMesDevendo > 0) {
+        alteraEstiloVisual(apartamento, 'backgroundColor', 'green');
+      }
     }
   }
 }
 
-function pesquisaApartamento(evento) {
-  const target = evento.target;
-  let value = target.value;
-  const resultado = document.querySelector('.resultado');
-
-  resultado.innerHTML = '';
-
-  value = value.trim();
-
-  if (value.length < 2) {
-    return;
-  }
-
-  const apartamentos = listaApartamentos.filter(apartamento => {
-    if (apartamento.apartamento === value) {
+function pesquisaApartamento(valorPesquisado) {
+  const apartamentos = listaInformacaoDosApartamentos.filter(apartamento => {
+    if (apartamento.apartamento === valorPesquisado) {
       return apartamento;
     }
 
     // Documentando por https://medium.com/thread-engineering/searching-and-sorting-text-with-diacritical-marks-in-javascript-45afef20e7f2#
     const nome = apartamento.nome.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '');
-    const valueClean = value.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '');
+    const valueClean = valorPesquisado.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '');
 
     if (nome.search(valueClean) >= 0) {
       return apartamento;
     }
   });
 
-  if (!apartamentos) {
-    return;
-  }
+  return apartamentos;
+}
 
-  apartamentos.forEach(apartamento => {
+function exibeResultado(arrayApartamentos) {
+  const resultado = document.querySelector('.resultado');
+  resultado.innerHTML = '';
+
+  arrayApartamentos.forEach(apartamento => {
     const p = document.createElement('p');
     p.innerText = `${apartamento.apartamento} - ${apartamento.nome}`;
     resultado.appendChild(p);
   });
-
 }
+
+function gerenciarPesquisa(evento) {
+  const target = evento.target;
+  let value = target.value;
+
+  value = value.trim();
+
+  if (value.length < 2) {
+    exibeResultado([]);
+    return;
+  }
+
+  const pesquisa = pesquisaApartamento(value);
+  exibeResultado(pesquisa);
+}
+
+function alteraEstiloVisual(elemento, regraCss, valor) {
+  elemento.style[regraCss] = valor;
+}
+
+// a função acima precisa receber dois prâmetros: elemento e o tipo de regra
+// dentro da função, vc vai aplicar a regra especificada no elemento
+// exemplo: alteraEstiloVisual(apartamento, 'devedor')
+// exemplo: alteraEstiloVisual(apartamento, 'pago')
+// exemplo: alteraEstiloVisual(apartamento, 'reiniciar')
