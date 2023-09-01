@@ -1,7 +1,10 @@
 const rua = document.querySelector("body");
 const mes = document.querySelector("#mes-referencia");
 const pesquisa = document.querySelector("#pesquisa");
-const form = document.querySelector("form");
+const forms = Array.from(document.querySelectorAll("form"));
+const botaoEntrar = document.querySelector(
+  'div.porteiro > form > button[type="submit"]'
+);
 rua.style.backgroundColor = "blue";
 
 const listaInformacaoDosApartamentos = [
@@ -791,7 +794,9 @@ const nomes = [
   "Lourdes",
 ];
 
-form.addEventListener("submit", (evento) => evento.preventDefault());
+forms.forEach((form) =>
+  form.addEventListener("submit", (evento) => evento.preventDefault())
+);
 
 nomes.forEach((nome, indice) => {
   const apartamento = listaInformacaoDosApartamentos[indice];
@@ -836,10 +841,21 @@ decideQuemEstaDevendo(
   listaDeApartamentosNaTela
 );
 
+criaElementoDeApartamento(listaInformacaoDosApartamentos);
+botaoEntrar.addEventListener("click", gerenciaEntradaNoPredio);
+
 function gerenciarDevedor(evento) {
   const target = evento.target;
-  const id = +target.id;
+  const id = +target.id.substring(3);
   const mes = mesDeReferencia();
+
+  if (target.tagName !== 'DIV') {
+    return;
+  }
+
+  if (mes === 0) {
+    return;
+  }
 
   incluirDevedor(id, mes);
   decideQuemEstaDevendo(
@@ -850,10 +866,19 @@ function gerenciarDevedor(evento) {
 }
 
 function gerenciarPagamento(evento) {
-  evento.preventDefault();
   const target = evento.target;
-  const id = +target.id;
+
+  if (target.tagName !== 'DIV') {
+    return;
+  }
+
+  evento.preventDefault();
+  const id = +target.id.substring(3);
   const mes = mesDeReferencia();
+
+  if (mes === 0) {
+    return;
+  }
 
   recebePagamento(id, mes);
   decideQuemEstaDevendo(
@@ -945,8 +970,8 @@ function decideQuemEstaDevendo(
 
     alteraEstiloVisual(apartamento, "reiniciar");
 
-    apartamento.innerText = `${infoApartamento.apartamento} - ${infoApartamento.nome}`;
-    apartamento.id = infoApartamento.id;
+    apartamento.innerText = infoApartamento.apartamento;
+    apartamento.id = `ap-${infoApartamento.id}`;
 
     if (mesReferencia > 0) {
       const naoEstaPagoNoMes = infoApartamento.pago.findIndex(
@@ -1038,6 +1063,10 @@ function alteraEstiloVisual(elemento, tipoRegra) {
       backgroundColor: "inherit",
       color: "inherit",
     },
+    visitante: {
+      color: "black",
+      backgroundColor: "yellow",
+    },
   };
   const regras = conjuntoRegras[tipoRegra];
   if (regras) {
@@ -1047,3 +1076,110 @@ function alteraEstiloVisual(elemento, tipoRegra) {
     }
   }
 }
+
+function criaElementoDeApartamento(arrayDeApartamento) {
+  const apDestino = document.querySelector("#destino");
+
+  const optionDesabilitado = document.createElement("option");
+  optionDesabilitado.innerText = "Selecione um apartamento";
+  optionDesabilitado.value = "";
+  optionDesabilitado.disabled = true;
+  optionDesabilitado.selected = true;
+
+  apDestino.appendChild(optionDesabilitado);
+
+  arrayDeApartamento.forEach((apartamento) => {
+    const option = document.createElement("option");
+    option.value = apartamento.id;
+    option.innerText = apartamento.apartamento;
+    apDestino.appendChild(option);
+  });
+}
+
+function capturaElementoPorId(id) {
+  const elemento = document.querySelector(`#ap-${id}`);
+  return elemento;
+}
+
+function gerenciaEntradaNoPredio() {
+  const nome = verificaNomeDoVisitante();
+  const apartamento = verificaApartamentoDoVisitante();
+
+  if (!nome || !apartamento) {
+    alert("Preencha os campos corretamente");
+    return;
+  }
+
+  const senha = geraSenhaDeEntrada();
+  let senhaDigitada;
+
+  do {
+    senhaDigitada = +verificaSenhaDeEntrada();
+  } while (senhaDigitada !== senha);
+
+  if (!confirmaEntrada()) {
+    return;
+  }
+
+  const apElemento = capturaElementoPorId(apartamento);
+  enviarVisitanteParaApartamento(apElemento, nome);
+}
+
+function verificaNomeDoVisitante() {
+  const nome = document.querySelector("#visitante").value;
+  return nome;
+}
+
+function verificaApartamentoDoVisitante() {
+  const apartamento = document.querySelector("#destino").value;
+  return apartamento;
+}
+
+function enviarVisitanteParaApartamento(apartamento, nome) {
+  const tagAncora = document.createElement("a");
+  tagAncora.href = `#${apartamento.id}`;
+  tagAncora.innerText = nome;
+  alteraEstiloVisual(tagAncora, "visitante");
+  tagAncora.addEventListener('click', gerenciarRemocao);
+
+  const tagBr = document.createElement("br");
+
+  apartamento.appendChild(tagAncora);
+  tagAncora.appendChild(tagBr);
+}
+
+function geraSenhaDeEntrada() {
+  const senha = Math.floor(Math.random() * 10);
+  return senha;
+}
+
+function verificaSenhaDeEntrada() {
+  const senha = prompt("Digite a senha de entrada");
+  return senha;
+}
+
+function confirmaEntrada() {
+  const confirma = confirm("Deseja confirmar a entrada?");
+  return confirma;
+}
+
+function gerenciarRemocao(event) {
+  event.preventDefault();
+  const target = event.target;
+
+  if (target.tagName !== "A") {
+    return;
+  }
+
+  removeVisita(target);
+}
+
+function removeVisita(elemento) {
+  elemento.remove();
+}
+
+
+// guardar elemento dos visitantes para, a cada renderização, continuar exibindo os visitantes
+// criar um array de visitantes
+// criar uma função que recebe o array de visitantes
+// exibir em tela os visitantes
