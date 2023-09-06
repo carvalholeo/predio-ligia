@@ -849,7 +849,7 @@ function gerenciarDevedor(evento) {
   const id = +target.id.substring(3);
   const mes = mesDeReferencia();
 
-  if (target.tagName !== 'DIV') {
+  if (target.tagName !== "DIV") {
     return;
   }
 
@@ -868,7 +868,7 @@ function gerenciarDevedor(evento) {
 function gerenciarPagamento(evento) {
   const target = evento.target;
 
-  if (target.tagName !== 'DIV') {
+  if (target.tagName !== "DIV") {
     return;
   }
 
@@ -997,6 +997,7 @@ function decideQuemEstaDevendo(
       }
     }
   }
+  carregarVisitasNaTela();
 }
 
 function pesquisaApartamento(valorPesquisado) {
@@ -1113,9 +1114,9 @@ function gerenciaEntradaNoPredio() {
   const senha = geraSenhaDeEntrada();
   let senhaDigitada;
 
-  do {
-    senhaDigitada = +verificaSenhaDeEntrada();
-  } while (senhaDigitada !== senha);
+  // do {
+  //   senhaDigitada = +verificaSenhaDeEntrada();
+  // } while (senhaDigitada !== senha);
 
   if (!confirmaEntrada()) {
     return;
@@ -1123,6 +1124,7 @@ function gerenciaEntradaNoPredio() {
 
   const apElemento = capturaElementoPorId(apartamento);
   enviarVisitanteParaApartamento(apElemento, nome);
+  salvarInformacoes(nome, apElemento);
 }
 
 function verificaNomeDoVisitante() {
@@ -1140,7 +1142,7 @@ function enviarVisitanteParaApartamento(apartamento, nome) {
   tagAncora.href = `#${apartamento.id}`;
   tagAncora.innerText = nome;
   alteraEstiloVisual(tagAncora, "visitante");
-  tagAncora.addEventListener('click', gerenciarRemocao);
+  tagAncora.addEventListener("click", gerenciarRemocao);
 
   const tagBr = document.createElement("br");
 
@@ -1171,15 +1173,64 @@ function gerenciarRemocao(event) {
     return;
   }
 
+  const idDoApartamento = target.hash.replace("#", "");
+
   removeVisita(target);
+  removeVisitaDoStorage(target.innerText, idDoApartamento);
 }
 
 function removeVisita(elemento) {
   elemento.remove();
 }
 
+function salvarInformacoes(visitante, apartamento) {
+  const visitanteNoPredio = localStorage.getItem("visitante");
+  let arrayVisitas = [];
 
-// guardar elemento dos visitantes para, a cada renderização, continuar exibindo os visitantes
-// criar um array de visitantes
-// criar uma função que recebe o array de visitantes
-// exibir em tela os visitantes
+  if (visitanteNoPredio) {
+    arrayVisitas = JSON.parse(visitanteNoPredio);
+  }
+
+  const objetoVisitante = {
+    nome: visitante,
+    idApartamento: apartamento.id,
+  };
+
+  arrayVisitas.push(objetoVisitante);
+  arrayVisitas = JSON.stringify(arrayVisitas);
+  localStorage.setItem("visitante", arrayVisitas);
+}
+
+// window.addEventListener("DOMContentLoaded", carregarVisitasNaTela); // disparado assim que o DOM termina de carregar, sem esperar a execução dos recursos
+// window.addEventListener("load", carregarVisitasNaTela); // disparado somente quando a tela termina de carregar e executar todos os recursos
+
+function carregarVisitasNaTela() {
+  const arrayDeVisitas = localStorage.getItem("visitante");
+  let visitasConvertidas = [];
+
+  if (arrayDeVisitas) {
+    visitasConvertidas = JSON.parse(arrayDeVisitas);
+  }
+
+  visitasConvertidas.forEach((visita) => {
+    const apElemento = document.getElementById(visita.idApartamento);
+    enviarVisitanteParaApartamento(apElemento, visita.nome);
+  });
+}
+
+function removeVisitaDoStorage(nome, idApartamento) {
+  const arrayDeVisitas = localStorage.getItem("visitante");
+  let visitasConvertidas = [];
+
+  if (arrayDeVisitas) {
+    visitasConvertidas = JSON.parse(arrayDeVisitas);
+  }
+
+  visitasConvertidas = visitasConvertidas.filter(
+    (visita) =>
+      !(visita.nome === nome && visita.idApartamento === idApartamento)
+  );
+  localStorage.setItem("visitante", JSON.stringify(visitasConvertidas));
+}
+
+
